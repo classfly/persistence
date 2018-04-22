@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 代码清单-1 -->
+<mapper namespace="com.classfly.mapper.UserMapper">
+    <resultMap id="user" type="pojo.User">
+        <result column="user_id" property="userId" />
+        <result column="user_name" property="userName" />
+        <result column="password" property="password" />
+        <result column="age" property="age" />
+    </resultMap>
+
+    <select id="query" resultMap="user">
+        SELECT * FROM user
+        ORDER BY ${id};
+    </select>
+
+    <insert id="insert" parameterType="pojo.User">
+        insert into user
+          (
+            user_id,
+            user_name,
+            password,
+            age)
+        values
+          (
+            #{userId},
+            #{userName},
+            #{password},
+            #{age}
+          )
+        <selectKey resultType="pojo.User" keyProperty="id" order="AFTER">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+    </insert>
+
+    <update id="update" parameterType="pojo.User">
+        UPDATE user
+        SET user_name = #{userName}
+          , password = #{password}
+          , age = #{age}
+        WHERE user_id = #{userId}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM user
+        WHERE user_id = #{userId}
+    </delete>
+</mapper>
